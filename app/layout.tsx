@@ -1,12 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -14,14 +9,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TravelAI - Tu Asistente Inteligente de Viajes",
+  title: "Wandr — Tu Workspace Inteligente de Viajes",
   description:
-    "Planifica tus viajes de forma inteligente con IA. Organiza itinerarios, descubre lugares y gestiona todos los detalles de tu aventura.",
-  keywords: ["viajes", "planificación", "IA", "itinerarios", "turismo"],
+    "Transforma 18 horas de caos de planificación en un plan organizado y listo para ejecutar. Workspace de viajes con IA.",
+  keywords: ["viajes", "planificación", "IA", "itinerarios", "workspace"],
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f766e",
+  themeColor: "#2563eb",
   width: "device-width",
   initialScale: 1,
 };
@@ -33,9 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
-      >
+      <body className={`${geistMono.variable} font-sans antialiased`}>
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
