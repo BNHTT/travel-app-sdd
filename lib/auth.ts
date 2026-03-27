@@ -1,15 +1,10 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { sql } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
     Credentials({
       name: "credentials",
       credentials: {
@@ -60,32 +55,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === "google") {
-        try {
-          const existingUsers = await sql`
-            SELECT id FROM users WHERE email = ${user.email}
-          `;
-
-          if (existingUsers.length === 0) {
-            await sql`
-              INSERT INTO users (id, email, name, image)
-              VALUES (${crypto.randomUUID()}, ${user.email}, ${user.name}, ${user.image})
-            `;
-          } else {
-            await sql`
-              UPDATE users 
-              SET name = ${user.name}, image = ${user.image}, updated_at = NOW()
-              WHERE email = ${user.email}
-            `;
-          }
-        } catch (error) {
-          console.error("Error syncing user:", error);
-          return false;
-        }
-      }
-      return true;
-    },
     async jwt({ token, user }) {
       if (user) {
         const dbUsers = await sql`
